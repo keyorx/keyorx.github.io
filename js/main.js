@@ -28,16 +28,32 @@ industryButtons.forEach(b => b.addEventListener('click', () => {
   if (r.bottom > innerHeight) window.scrollBy({ top: Math.min(r.bottom - innerHeight + 16, r.top - 80), behavior: 'smooth' });
 }));
 
-// Copy buttons for the phone number and email (works for buttons added later too)
+// Copy buttons for the phone number and email (works for buttons added later too).
+// Falls back to the older copy command for in-app browsers like Messenger's.
+function legacyCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (err) {}
+  ta.remove();
+  return ok ? Promise.resolve() : Promise.reject();
+}
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text).catch(() => legacyCopy(text));
+  }
+  return legacyCopy(text);
+}
 document.addEventListener('click', e => {
   const b = e.target.closest('.copy');
   if (!b) return;
-  const done = () => { b.textContent = 'Copied!'; setTimeout(() => { b.textContent = 'Copy'; }, 1600); };
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(b.dataset.copy).then(done, () => { prompt('Copy this:', b.dataset.copy); });
-  } else {
-    prompt('Copy this:', b.dataset.copy);
-  }
+  const show = (label, ms) => { b.textContent = label; setTimeout(() => { b.textContent = 'Copy'; }, ms); };
+  copyText(b.dataset.copy).then(() => show('Copied!', 1600), () => show('Press and hold to copy', 2600));
 });
 
 $('year').textContent = new Date().getFullYear();
