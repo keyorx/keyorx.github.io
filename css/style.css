@@ -261,3 +261,64 @@ footer { height: 40px; }
   .contact { padding: 40px 20px 22px; }
   .contact-foot { flex-direction: column; gap: 12px; }
 }
+
+/* Color accents
+   One shared palette (with lighter versions for dark mode), plus each client's own brand colors. */
+:root {
+  --c-blue: #1e3a8a; --c-violet: #6d28d9; --c-teal: #0f766e; --c-amber: #b45309; --c-rose: #be123c; --c-cyan: #0e7490;
+  --kw-bg: #0a3232; --kw-gold: #d4a93c; --kw-text: #8f6b10;
+  --mg-bg: #121212; --mg-red: #d71920; --mg-text: #b3141a;
+  --tr-bg: #3f312a; --tr-gold: #c8a24c; --tr-text: #8a6a22;
+}
+[data-mode="dark"] {
+  --c-blue: #8ea8ef; --c-violet: #b79cff; --c-teal: #5fd4c4; --c-amber: #f5b452; --c-rose: #fb7c96; --c-cyan: #67d6ea;
+  --kw-text: #e9c764; --mg-text: #ff5a60; --tr-text: #e4b94e;
+}
+.tone-blue { --tone: var(--c-blue); } .tone-violet { --tone: var(--c-violet); } .tone-teal { --tone: var(--c-teal); }
+.tone-amber { --tone: var(--c-amber); } .tone-rose { --tone: var(--c-rose); } .tone-cyan { --tone: var(--c-cyan); }
+
+.hero { background:
+  radial-gradient(38% 45% at 16% 32%, color-mix(in srgb, var(--c-violet) 13%, transparent), transparent 70%),
+  radial-gradient(38% 45% at 84% 26%, color-mix(in srgb, var(--c-teal) 13%, transparent), transparent 70%),
+  radial-gradient(50% 45% at 50% 78%, color-mix(in srgb, var(--c-blue) 10%, transparent), transparent 70%); }
+.built b.c-mg { color: var(--mg-text); } .built b.c-kw { color: var(--kw-text); } .built b.c-tr { color: var(--tr-text); }
+
+/* Systems: accent color on the image, tags and bullets */
+.proj[class*="tone-"] .shot { background: color-mix(in srgb, var(--tone) 16%, var(--surface-2)); box-shadow: inset 0 -3px 0 var(--tone); }
+.proj[class*="tone-"] .tags, .team-card[class*="tone-"] .tags { color: var(--tone); }
+.proj[class*="tone-"] .points li::before { background: var(--tone); }
+.proj[class*="tone-"] .chips-mini span.on { border-color: var(--tone); color: var(--tone); }
+.proj[class*="tone-"] .row-mini em.go { background: var(--tone); color: #fff; }
+[data-mode="dark"] .proj[class*="tone-"] .row-mini em.go { color: #030303; }
+
+/* Team projects and About cards: colored icon and top edge */
+.team-card[class*="tone-"], .step[class*="tone-"] { border-top: 3px solid var(--tone); }
+.team-card[class*="tone-"] .ic, .role-card[class*="tone-"] .ic { background: color-mix(in srgb, var(--tone) 12%, transparent); border-color: color-mix(in srgb, var(--tone) 35%, transparent); color: var(--tone); }
+.team-card[class*="tone-"] .flow i { color: var(--tone); }
+.team-card[class*="tone-"] .flow span { border-color: color-mix(in srgb, var(--tone) 35%, var(--line)); }
+.role-card[class*="tone-"] li::before { background: var(--tone); }
+.facts [class*="tone-"] b, .facts.tone-blue b { color: var(--tone); }
+.facts > [class*="tone-"] b { color: var(--tone); }
+.step[class*="tone-"] .n { color: var(--tone); font-weight: 500; }
+
+/* Website projects: each client's own brand colors */
+.brand-kwatogs { --b-bg: var(--kw-bg); --b-accent: var(--kw-gold); --b-text: var(--kw-text); --b-on: #0a3232; }
+.brand-mg { --b-bg: var(--mg-bg); --b-accent: var(--mg-red); --b-text: var(--mg-text); --b-on: #ffffff; }
+.brand-treats { --b-bg: var(--tr-bg); --b-accent: var(--tr-gold); --b-text: var(--tr-text); --b-on: #3f312a; }
+.proj[class*="brand-"] .shot { background: var(--b-bg); border-bottom-color: var(--b-bg); box-shadow: inset 0 -3px 0 var(--b-accent); }
+.proj[class*="brand-"] .tags { color: var(--b-text); }
+.proj[class*="brand-"] .points li::before { background: var(--b-accent); }
+.proj[class*="brand-"] .btnmini { background: var(--b-accent); color: var(--b-on); }
+.proj[class*="brand-"] .sb-ill { color: var(--b-accent); }
+.proj[class*="brand-"] .tiles-mini span:nth-child(2)::after { background: var(--b-accent); opacity: 1; }
+.proj[class*="brand-"] .proj-foot .more { color: var(--b-text); }
+
+/* "Also a great fit": a small colored dot on each business type */
+.chips:not(.done) button::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px; vertical-align: 1px; background: var(--dot, var(--c-blue)); }
+.chips:not(.done) button:nth-child(6n+1) { --dot: var(--c-violet); }
+.chips:not(.done) button:nth-child(6n+2) { --dot: var(--c-teal); }
+.chips:not(.done) button:nth-child(6n+3) { --dot: var(--c-amber); }
+.chips:not(.done) button:nth-child(6n+4) { --dot: var(--c-rose); }
+.chips:not(.done) button:nth-child(6n+5) { --dot: var(--c-cyan); }
+.chips:not(.done) button:nth-child(6n) { --dot: var(--c-blue); }
+.chips:not(.done) button[aria-pressed="true"]::before { background: currentColor; }
