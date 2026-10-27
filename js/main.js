@@ -1,5 +1,10 @@
 const $ = id => document.getElementById(id);
 
+// Count an action in GoatCounter (does nothing if the stats script hasn't loaded or is blocked)
+function track(name) {
+  if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: name, title: name, event: true });
+}
+
 // Light / dark mode
 document.querySelectorAll('.mode-toggle').forEach(b => b.addEventListener('click', () => {
   const next = document.documentElement.dataset.mode === 'dark' ? 'light' : 'dark';
@@ -24,6 +29,7 @@ industryButtons.forEach(b => b.addEventListener('click', () => {
       '<span class="detail">0917 329 2884<button type="button" class="copy" data-copy="09173292884">Copy</button></span>' +
       '<span class="detail">keyorx@gmail.com<button type="button" class="copy" data-copy="keyorx@gmail.com">Copy</button></span>' +
     '</div>';
+  track('industry: ' + name);
   const r = $('indPanel').getBoundingClientRect();
   if (r.bottom > innerHeight) window.scrollBy({ top: Math.min(r.bottom - innerHeight + 16, r.top - 80), behavior: 'smooth' });
 }));
@@ -50,8 +56,11 @@ function copyText(text) {
   return legacyCopy(text);
 }
 document.addEventListener('click', e => {
+  const panelLink = e.target.closest('#indPanel a');
+  if (panelLink) track('industry-panel-' + panelLink.textContent.trim().toLowerCase());
   const b = e.target.closest('.copy');
   if (!b) return;
+  track(b.dataset.copy.includes('@') ? 'copy-email' : 'copy-phone');
   const show = (label, ms) => { b.textContent = label; setTimeout(() => { b.textContent = 'Copy'; }, ms); };
   copyText(b.dataset.copy).then(() => show('Copied!', 1600), () => show('Press and hold to copy', 2600));
 });
